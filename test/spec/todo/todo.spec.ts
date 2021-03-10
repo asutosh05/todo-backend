@@ -42,7 +42,7 @@ describe('POST /todos', () => {
 
     expect(res).to.have.status(400);
     expect(res.body.failures).to.have.deep.members([
-            { field: 'title', message: 'Please provide a titel.' },
+            { field: 'title', message: 'Please provide a title.' },
     ]);
   });
 

@@ -6,7 +6,7 @@
 		"VALIDATION_FAILED": "Validation failed. Please modify the request and try again."
 	},
 	"VALIDATION_ERRORS": {
-		"INVALID_TITLE": "Please provide a titel.",
+		"INVALID_TITLE": "Please provide a title.",
 		"INVALID_ID": "Please provide id."
 	},
 	"MESSAGES": {
