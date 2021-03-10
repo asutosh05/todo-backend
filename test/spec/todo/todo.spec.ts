@@ -77,3 +77,49 @@ describe('delete /todo/:id', () => {
   });
 
 });
+
+describe('PUT /todos/:id', () => {
+
+  it('should return 204 if todoitem is present', async () => {
+    const resCreate = await chai.request(expressApp).post('/todos').send({
+      title: 'This title will update',
+    });
+
+    const resUpdate = await chai.request(expressApp).put(`/todos/${resCreate.body.id}`).send({
+      title: 'New title',
+    });
+    expect(resUpdate).to.have.status(200);
+    expect(resUpdate.body.title).to.equal('New title');
+  });
+
+  it('should return a validation error 400 if title is not present.', async () => {
+    const resCreate = await chai.request(expressApp).post('/todos').send({
+      title: 'This Title will not update',
+    });
+
+    const res = await chai.request(expressApp).put(`/todos/${resCreate.body.id}`).send({
+      title: '',
+    });
+    expect(res).to.have.status(400);
+    expect(res.body.failures).to.have.deep.members([
+        { field: 'title', message: 'Please provide a title.' },
+    ]);
+  });
+
+  it('should return 404 if id is not present in url', async () => {
+    const res = await chai.request(expressApp).put('/todos/');
+    expect(res).to.have.status(404);
+  });
+
+  it('should return 404 if todo id not present in db', async () => {
+    const resCreate = await chai.request(expressApp).post('/todos').send({
+      title: 'Try to update title',
+    });
+
+    await chai.request(expressApp).delete(`/todos/${resCreate.body.id}`);
+    const resUpdated = await chai.request(expressApp).put(`/todos/${resCreate.body.id}`).send({
+      title: 'New title',
+    });
+    expect(resUpdated).to.have.status(404);
+  });
+});
