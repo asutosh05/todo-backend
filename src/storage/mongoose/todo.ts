@@ -2,34 +2,13 @@ import { model, Schema } from 'mongoose';
 
 const todoSchema: Schema = new Schema(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    isCompleted:{
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    isDeleted:{
-      type:Boolean,
-      required:true,
-      default:false,
-    },
-    completedAt:{
-      type: Date,
-      default:null,
-    },
-    deletedAt:{
-      type:Boolean,
-      default:null,
-    },
-  }  ,
+    title: { type: String, required: true },
+  },
   {
-    collection:'todo',
-    timestamps:{
-      createdAt:'createdAt',
-      updatedAt:'updatedAt',
+    collection: 'todos',
+    timestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
     },
   },
 );
