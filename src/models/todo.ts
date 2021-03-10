@@ -1,13 +1,15 @@
 import { BaseModel } from './base-model';
 import { LooseObject } from '@typings';
 
-export class Todo extends BaseModel {
+export class TodoItem extends BaseModel {
   title: string;
+  isDeleted: boolean;
 
-  constructor(json?: any) {
+  constructor(json: any) {
     super(json);
     if (json) {
       this.title = json.title;
+      this.isDeleted = json.isDeleted;
     }
   }
 
@@ -15,6 +17,7 @@ export class Todo extends BaseModel {
     return {
       id: this._id,
       title: this.title,
+      isDeleted: this.isDeleted,
     };
   }
 }

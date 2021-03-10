@@ -8,7 +8,7 @@ import {
   Mongoose,
   Types,
 } from 'mongoose';
-import { Todo, BaseModel, ModelFactory } from '@models';
+import { TodoItem, BaseModel, ModelFactory } from '@models';
 import { IDataStore, QueryOptions, DeleteResult } from '@storage';
 import { LooseObject } from '@typings';
 
@@ -196,7 +196,7 @@ export class MongoStore implements IDataStore {
   private getModel<T extends BaseModel>(
     modelFactory: ModelFactory<T>,
   ): MongoosModel<Document> {
-    if (modelFactory.getType() === typeof Todo) {
+    if (modelFactory.getType() === typeof TodoItem) {
       return todo;
     }
     return null;
