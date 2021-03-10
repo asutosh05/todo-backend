@@ -6,7 +6,7 @@
     "console": true
   },
   "mongoDb": {
-    "uri": "mongodb://localhost:27017/boilerplate-development"
+    "uri": "mongodb://127.0.0.1:27017/dev"
   },
   "www": {
     "port": 4200
