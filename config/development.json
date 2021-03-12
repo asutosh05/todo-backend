@@ -6,7 +6,7 @@
     "console": true
   },
   "mongoDb": {
-    "uri": "mongodb://127.0.0.1:27017/dev"
+    "uri": "mongodb://127.0.0.1:27017/todo-dev"
   },
   "www": {
     "port": 4200
