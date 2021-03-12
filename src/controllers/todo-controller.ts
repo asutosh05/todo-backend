@@ -166,7 +166,7 @@ export class TodoController extends BaseController {
     next: NextFunction,
   ) => {
 
-    const todoItems = await this.appContext.todoRepository.getAll();
+    const todoItems = await this.appContext.todoRepository.getAll({ isDeleted: false });
 
     if (todoItems) {
       res.status(200).json(todoItems);
