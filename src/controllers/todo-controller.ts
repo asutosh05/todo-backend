@@ -4,7 +4,7 @@ import { NextFunction, response, Response, Router } from 'express';
 import { Validation } from '@helpers';
 import { TodoItem } from '@models';
 import { AppContext, Errors, ExtendedRequest, ValidationFailure } from '@typings';
-import { createTodoValidator, deleteTodoValidator, updateTodoValidator } from '@validators';
+import { createTodoValidator, deleteTodoValidator, updateTodoValidator, getTodoValidator } from '@validators';
 import { todo } from 'src/storage/mongoose';
 
 export class TodoController extends BaseController {
@@ -32,6 +32,17 @@ export class TodoController extends BaseController {
       `${this.basePath}/:id`,
       updateTodoValidator(this.appContext),
       this.updateTodoItem,
+    );
+
+    this.router.get(
+      `${this.basePath}/:id`,
+      getTodoValidator(this.appContext),
+      this.getTodoItem,
+    );
+
+    this.router.get(
+      `${this.basePath}`,
+      this.getAllTodoItems,
     );
   }
 
@@ -115,6 +126,51 @@ export class TodoController extends BaseController {
     if (todoItem._id) {
       res.status(200).json(todoItem.serialize());
     } else {
+      res.status(404).send();
+    }
+
+  }
+
+  private getTodoItem = async (
+    req: ExtendedRequest,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const failures: ValidationFailure[] = Validation.extractValidationErrors(
+      req,
+    );
+
+    if (failures.length > 0) {
+      const valError = new Errors.ValidationError(
+        res.__('VALIDATION_ERRORS.INVALIS_ID'),
+        failures,
+      );
+      return next(valError);
+    }
+
+    const { id } = req.params;
+
+    const todoItem = await this.appContext.todoRepository.findOne(
+      { _id: id, isDeleted: false },
+    );
+    if (todoItem._id) {
+      res.status(200).json(todoItem.serialize());
+    }else {
+      res.status(404).send();
+    }
+  }
+
+  private getAllTodoItems = async (
+    req: ExtendedRequest,
+    res: Response,
+    next: NextFunction,
+  ) => {
+
+    const todoItems = await this.appContext.todoRepository.getAll();
+
+    if (todoItems) {
+      res.status(200).json(todoItems);
+    }else {
       res.status(404).send();
     }
 

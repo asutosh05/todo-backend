@@ -123,3 +123,29 @@ describe('PUT /todos/:id', () => {
     expect(resUpdated).to.have.status(404);
   });
 });
+
+describe('get /todo/:id', () => {
+  it('should return 200 if id is valid', async () => {
+    const resCreate = await chai.request(expressApp).post('/todos').send({
+      title: 'Todo created to fetch',
+    });
+    const res = await chai.request(expressApp).get(`/todos/${resCreate.body.id}`);
+
+    expect(res).to.have.status(200);
+  });
+
+  it('should return 404 if todo not present', async () => {
+    const resCreate = await chai.request(expressApp).post('/todos').send({
+      title: 'This todo will not get deleted',
+    });
+
+    const resDelete = await chai.request(expressApp).delete(`/todos/${resCreate.body.id}`);
+
+    expect(resDelete).to.have.status(204);
+
+    const resFetch = await chai.request(expressApp).get(`/todos/${resCreate.body.id}`);
+
+    expect(resFetch).to.have.status(404);
+  });
+
+});
